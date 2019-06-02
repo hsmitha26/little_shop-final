@@ -62,6 +62,10 @@ class Order < ApplicationRecord
         .sum("items.inventory")
   end
 
+  def sufficient_inventory_for_order(merchant_id)
+    self.total_item_inventory_for_merchant(merchant_id) >= self.total_quantity_for_merchant(merchant_id)
+  end
+
   def self.orders_by_status(status)
     Order.where(status: status)
   end
