@@ -52,7 +52,7 @@ RSpec.describe 'Merchant dashboard: ' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit dashboard_path
 
-      expect(page).to have_content("You have #{@unfulfilled_order_count} orders worth #{number_to_currency(@unfulfilled_order_revenue)}.")
+      expect(page).to have_content("You have #{Order.unfulfilled_order_count(@merchant.id)} order(s) worth #{number_to_currency(Order.unfulfilled_order_revenue(@merchant.id))}.")
     end
   end
 end

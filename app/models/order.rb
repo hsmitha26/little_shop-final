@@ -28,7 +28,25 @@ class Order < ApplicationRecord
   end
 
   def self.unfulfilled_order_revenue(merchant_id)
-  
+    self.joins(:items)
+    .where(status: 0)
+    .where("items.merchant_id = ?", merchant_id)
+    .where("order_items.fulfilled = false")
+    .select('items.*, order_items.quantity, order_items.price')
+    .sum('order_items.quantity * order_items.price')
+  end
+
+  def total_price_for_merchant(merchant_id)
+    items.joins(:order_items)
+    .where(items: {merchant_id: merchant_id})
+    .select('items.id, order_items.quantity, order_items.price')
+    .distinct
+    .sum('order_items.quantity * order_items.price')
+  end
+
+  def order_items_for_merchant(merchant_id)
+    order_items.joins(:item)
+    .where(items: {merchant_id: merchant_id})
   end
 
   def total_quantity_for_merchant(merchant_id)
@@ -37,19 +55,6 @@ class Order < ApplicationRecord
          .where(items: {merchant_id: merchant_id})
          .distinct
          .sum('order_items.quantity')
-  end
-
-  def total_price_for_merchant(merchant_id)
-    items.joins(:order_items)
-         .where(items: {merchant_id: merchant_id})
-         .select('items.id, order_items.quantity, order_items.price')
-         .distinct
-         .sum('order_items.quantity * order_items.price')
-  end
-
-  def order_items_for_merchant(merchant_id)
-    order_items.joins(:item)
-               .where(items: {merchant_id: merchant_id})
   end
 
   def self.orders_by_status(status)
