@@ -57,6 +57,11 @@ class Order < ApplicationRecord
          .sum('order_items.quantity')
   end
 
+  def total_item_inventory_for_merchant(merchant_id)
+    items.where(items: {merchant_id: merchant_id})
+        .sum("items.inventory")
+  end
+
   def self.orders_by_status(status)
     Order.where(status: status)
   end
