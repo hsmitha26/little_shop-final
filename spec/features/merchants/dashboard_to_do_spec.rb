@@ -24,10 +24,10 @@ RSpec.describe 'Merchant dashboard: ' do
     @oi7 = create(:order_item, order: @o3, item: @i3, quantity: 9, price: 1)
 
     #shipped order
-    @oi4 = create(:order_item, order: @o3, item: @i1, quantity: 4, price: 2)
+    @oi4 = create(:fulfilled_order_item, order: @o3, item: @i1, quantity: 4, price: 2)
 
     #cancelled order
-    @oi5 = create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
+    # @oi5 = create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
 
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
     visit dashboard_path
@@ -45,9 +45,6 @@ RSpec.describe 'Merchant dashboard: ' do
       within ("#items-to-do-#{@i2.id}") do
         expect(page).to have_link(@i2.name)
       end
-
-      click_on @i1.name
-      expect(current_path).to eq(edit_dashboard_item_path(@i1))
     end
 
     it "should display a list of unfulfilled orders and potential revenue for merchant's items." do

@@ -29,11 +29,10 @@ class Order < ApplicationRecord
 
   def self.unfulfilled_order_revenue(merchant_id)
     self.joins(:items)
-    .where(status: 0)
-    .where("items.merchant_id = ?", merchant_id)
-    .where("order_items.fulfilled = false")
-    .select('items.*, order_items.quantity, order_items.price')
-    .sum('order_items.quantity * order_items.price')
+        .select('order_items.quantity, order_items.price')
+        .where(status: 0)
+        .where("items.merchant_id = ?", merchant_id)
+        .sum('(order_items.quantity * order_items.price)')
   end
 
   def total_price_for_merchant(merchant_id)

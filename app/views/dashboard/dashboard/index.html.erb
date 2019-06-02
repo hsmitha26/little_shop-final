@@ -128,10 +128,17 @@
 <% @merchant.items.each do |item| %>
   <tr id="items-to-do-<%= item.id %>">
     <td><% if item.image == "https://picsum.photos/200/300" %>
-      <p>Change the default item image: <%= link_to item.name, edit_dashboard_item_path(item)%></p>
-    <% end %></td>
+      Change the default item image: <%= link_to item.name, edit_dashboard_item_path(item)%>
+      <% else %>
+      <%= item.name %>
+      <% end %></td>
+    <td><% if item.sufficient_inventory?(@merchant.id) %>
+        Yes
+      <% else %>
+        No
+      <% end %></td>
   </tr>
+<% end %>
   </tbody>
 </table>
-<% end %>
 <br>

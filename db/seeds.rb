@@ -53,6 +53,6 @@ create(:fulfilled_order_item, order: order, item: item_2, price: 2, quantity: 1,
 
 puts 'seed data finished'
 puts "Users created: #{User.count.to_i}"
-# puts "Orders created: #{Order.count.to_i}"
+puts "Orders created: #{Order.count.to_i}"
 puts "Items created: #{Item.count.to_i}"
-# puts "OrderItems created: #{OrderItem.count.to_i}"
+puts "OrderItems created: #{OrderItem.count.to_i}"
