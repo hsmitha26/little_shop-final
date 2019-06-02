@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe 'Merchant dashboard: ' do
   before :each do
     @merchant = create(:merchant)
-    @admin = create(:admin)
     @i1, @i2 = create_list(:item, 2, user: @merchant, image: "https://picsum.photos/200/300")
     @i3 = create(:item, user: @merchant, image: "https://images.unsplash.com/photo-1545398865-0062dafeb74d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60")
+
+    @other_merchant = create(:merchant)
+    @i4 = create(:item, user: @other_merchant)
+
     @o1, @o2 = create_list(:order, 2)
     @o3 = create(:shipped_order)
     @o4 = create(:cancelled_order)
@@ -13,7 +16,9 @@ RSpec.describe 'Merchant dashboard: ' do
     #pending orders
     @oi1 = create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
     @oi2 = create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
+
     @oi3 = create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
+    @oi6 = create(:order_item, order: @o2, item: @i4, quantity: 2, price: 2)
 
     #shipped order
     @oi4 = create(:order_item, order: @o3, item: @i1, quantity: 4, price: 2)
@@ -45,9 +50,9 @@ RSpec.describe 'Merchant dashboard: ' do
     it "should display a list of unfulfilled orders and potential revenue for merchant's items." do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit dashboard_path
-      within "#orders-to-do-#{@o1}" do
-        
-      end
+      # binding.pry
+      expect(page).to have_content("Unfulfilled Items: #{@unfulfilled_order_count}")
+      expect(page).to have_content("Potential Revenue: #{number_to_currency(@unfulfilled_order_revenue)}")
     end
   end
 end

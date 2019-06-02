@@ -80,6 +80,10 @@ RSpec.describe Order, type: :model do
       expect(Order.pending_orders_for_merchant(@merchant.id)).to eq([@o7, @o8])
     end
 
+    it ".unfulfilled_order_count" do
+      expect(Order.unfulfilled_order_count).to eq(2)
+    end
+
     it '.orders_by_status(status)' do
       expect(Order.orders_by_status(:pending)).to eq([@o7, @o8])
       expect(Order.orders_by_status(:packaged)).to eq([@packaged_orders[0], @packaged_orders[1], @packaged_orders[2]])
