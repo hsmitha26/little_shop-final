@@ -144,6 +144,11 @@ RSpec.describe Order, type: :model do
       expect(@o2.total_quantity_for_merchant(@merchant.id)).to eq(4)
     end
 
+    it ".total_inventory_for_merchant" do
+      expect(@o1.total_inventory_for_merchant(@merchant.id)).to eq(3)
+      expect(@o2.total_inventory_for_merchant(@merchant.id)).to eq(4)
+    end
+
     it '.total_item_count' do
       expect(@order.total_item_count).to eq(@oi_1.quantity + @oi_2.quantity)
     end
