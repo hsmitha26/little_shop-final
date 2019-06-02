@@ -95,13 +95,18 @@
       <% @pending_orders.each do |order| %>
         <tr id="order-<%= order.id %>">
           <td><% if current_admin? || (current_merchant? && current_user == @merchant) %>
-          <%= link_to order.id, dashboard_order_path(order) %>
+            <%= link_to order.id, dashboard_order_path(order) %>
           <% elsif current_admin? %>
-          <%= order.id %>
+            <%= order.id %>
           <% end %></td>
           <td><%= order.created_at %></td>
           <td><%= order.total_quantity_for_merchant(@merchant.id) %></td>
           <td><%= order.total_price_for_merchant(@merchant.id) %></td>
+          <td><% if order.sufficient_inventory_for_order(@merchant.id) %>
+            Yes
+          <% else %>
+            No
+          <% end %></td>
         </tr>
       <% end %>
     </tbody>

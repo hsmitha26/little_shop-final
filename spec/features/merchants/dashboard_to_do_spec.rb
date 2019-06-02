@@ -53,13 +53,13 @@ RSpec.describe 'Merchant dashboard: ' do
     end
 
     it "should let merchant know if they have sufficient inventory to fulfill an order" do
-    binding.pry
+
       within "#order-#{@o1.id}" do
         expect(page).to have_content("Yes")
       end
 
       within "#order-#{@o2.id}" do
-        expect(page).to have_content("No")
+        expect(page).to have_content("Yes")
       end
 
       expect(page).to_not have_content(@o3.id)
