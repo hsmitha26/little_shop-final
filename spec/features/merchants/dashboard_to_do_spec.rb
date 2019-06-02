@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ActionView::Helpers::NumberHelper
 
 RSpec.describe 'Merchant dashboard: ' do
   before :each do
@@ -50,9 +51,8 @@ RSpec.describe 'Merchant dashboard: ' do
     it "should display a list of unfulfilled orders and potential revenue for merchant's items." do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit dashboard_path
-      # binding.pry
-      expect(page).to have_content("Unfulfilled Items: #{@unfulfilled_order_count}")
-      expect(page).to have_content("Potential Revenue: #{number_to_currency(@unfulfilled_order_revenue)}")
+
+      expect(page).to have_content("You have #{@unfulfilled_order_count} orders worth #{number_to_currency(@unfulfilled_order_revenue)}.")
     end
   end
 end

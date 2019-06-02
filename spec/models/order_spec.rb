@@ -81,7 +81,11 @@ RSpec.describe Order, type: :model do
     end
 
     it ".unfulfilled_order_count" do
-      expect(Order.unfulfilled_order_count).to eq(2)
+      expect(Order.unfulfilled_order_count(@merchant.id)).to eq(2)
+    end
+
+    it ".unfulfilled_order_revenue" do
+      expect(Order.unfulfilled_order_revenue(@merchant.id).to eq(14))
     end
 
     it '.orders_by_status(status)' do

@@ -118,8 +118,4 @@
   </div>
 <% end %>
 <br>
-
-<% @pending_orders.each do |order| %>
-  <%# <% order.merchant_revenue %> %>
-<%# <% binding.pry %> %>
-<% end %>
+<h5>You have <%= @unfulfilled_order_count %> order(s) worth <%= number_to_currency(@unfulfilled_order_revenue) %></h5>

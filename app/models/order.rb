@@ -23,6 +23,14 @@ class Order < ApplicationRecord
         .distinct
   end
 
+  def self.unfulfilled_order_count(merchant_id)
+    self.pending_orders_for_merchant(merchant_id).count
+  end
+
+  def self.unfulfilled_order_revenue(merchant_id)
+  
+  end
+
   def total_quantity_for_merchant(merchant_id)
     items.joins(:order_items)
          .select('items.id, order_items.quantity')
