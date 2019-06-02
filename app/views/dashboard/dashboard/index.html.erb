@@ -115,13 +115,23 @@
 
 <h3>Pending Tasks</h3>
 <br>
-<h5>Item(s) With Default Image: </h5>
+<h5>You have <%= @unfulfilled_order_count %> unfulfilled order(s) worth <%= number_to_currency(@unfulfilled_order_revenue) %>.</h5>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item(s) With Default Image</th>
+      <th>Sufficient Item Inventory For All Orders</th>
+    </tr>
+  </thead>
+  <tbody>
 <% @merchant.items.each do |item| %>
-  <div id="items-to-do-<%= item.id %>">
-    <% if item.image == "https://picsum.photos/200/300" %>
+  <tr id="items-to-do-<%= item.id %>">
+    <td><% if item.image == "https://picsum.photos/200/300" %>
       <p>Change the default item image: <%= link_to item.name, edit_dashboard_item_path(item)%></p>
-    <% end %>
-  </div>
+    <% end %></td>
+  </tr>
+  </tbody>
+</table>
 <% end %>
 <br>
-<h5>You have <%= @unfulfilled_order_count %> unfulfilled order(s) worth <%= number_to_currency(@unfulfilled_order_revenue) %>.</h5>
