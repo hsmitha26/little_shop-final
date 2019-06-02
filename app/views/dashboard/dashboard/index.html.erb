@@ -106,3 +106,14 @@
     </tbody>
   </table>
 <% end %>
+
+<h3>Pending Tasks</h3>
+<br>
+<% @merchant.items.each do |item| %>
+  <div id="items-<%= item.id %>">
+    <% if item.image == "https://picsum.photos/200/300" %>
+      <p>Change the default item image: <%= link_to item.name, edit_dashboard_item_path(item)%></p>
+    <% end %>
+  </div>
+<% end %>
+<br>
