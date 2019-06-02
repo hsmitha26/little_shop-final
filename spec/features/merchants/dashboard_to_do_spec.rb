@@ -26,13 +26,13 @@ RSpec.describe 'Merchant dashboard: ' do
 
     #cancelled order
     @oi5 = create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
+
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
+    visit dashboard_path
   end
 
   describe 'under to-do list: ' do
     it "checks if they are using a default image for their items and alerts them." do
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
-      visit dashboard_path
-
       expect(page).to have_content("Pending Tasks")
       expect(page).to_not have_link(@i3.name)
 
@@ -49,10 +49,21 @@ RSpec.describe 'Merchant dashboard: ' do
     end
 
     it "should display a list of unfulfilled orders and potential revenue for merchant's items." do
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
-      visit dashboard_path
-
       expect(page).to have_content("You have #{Order.unfulfilled_order_count(@merchant.id)} unfulfilled order(s) worth #{number_to_currency(Order.unfulfilled_order_revenue(@merchant.id))}.")
+    end
+
+    it "should let merchant know if they have sufficient inventory to fulfill an order" do
+    # binding.pry
+      within "#order-#{@o1.id}" do
+        expect(page).to have_content("Yes")
+      end
+
+      within "#order-#{@o2.id}" do
+        expect(page).to have_content("Yes")
+      end
+
+      expect(page).to_not have_content(@o3.id)
+      expect(page).to_not have_content(@o4.id)
     end
   end
 end
