@@ -62,9 +62,9 @@ RSpec.describe Order, type: :model do
       oi2 = create(:fulfilled_order_item, order: @o6)
 
       @o7, @o8 = create_list(:order, 2, user: user)
-      create(:order_item, order: @o7, item: @i1)
-      create(:order_item, order: @o7)
-      create(:order_item, order: @o8, item: @i2)
+      @oi1 = create(:order_item, order: @o7, item: @i1)
+      # create(:order_item, order: @o7)
+      @oi2 = create(:order_item, order: @o8, item: @i2)
 
       @packaged_orders = create_list(:packaged_order, 3, user: user)
       create(:fulfilled_order_item, order: @packaged_orders[0])
@@ -80,21 +80,33 @@ RSpec.describe Order, type: :model do
       expect(Order.pending_orders_for_merchant(@merchant.id)).to eq([@o7, @o8])
     end
 
+    it ".unfulfilled_order_count" do
+      expect(Order.unfulfilled_order_count(@merchant.id)).to eq(2)
+    end
+
+    it ".unfulfilled_order_revenue" do
+      expect(Order.unfulfilled_order_revenue(@merchant.id)).to eq(435)
+    end
+
     it '.orders_by_status(status)' do
       expect(Order.orders_by_status(:pending)).to eq([@o7, @o8])
       expect(Order.orders_by_status(:packaged)).to eq([@packaged_orders[0], @packaged_orders[1], @packaged_orders[2]])
       expect(Order.orders_by_status(:shipped)).to eq([@o1, @o2, @o3, @o4, @o5, @o6])
       expect(Order.orders_by_status(:cancelled)).to eq([@cancelled_orders[0], @cancelled_orders[1]])
     end
+
     it '.pending_orders' do
       expect(Order.pending_orders).to eq([@o7, @o8])
     end
+
     it '.packaged_orders' do
       expect(Order.packaged_orders).to eq([@packaged_orders[0], @packaged_orders[1], @packaged_orders[2]])
     end
+
     it '.shipped_orders' do
       expect(Order.shipped_orders).to eq([@o1, @o2, @o3, @o4, @o5, @o6])
     end
+
     it '.cancelled_orders' do
       expect(Order.cancelled_orders).to eq([@cancelled_orders[0], @cancelled_orders[1]])
     end
@@ -130,6 +142,16 @@ RSpec.describe Order, type: :model do
     it '.total_quantity_for_merchant' do
       expect(@o1.total_quantity_for_merchant(@merchant.id)).to eq(3)
       expect(@o2.total_quantity_for_merchant(@merchant.id)).to eq(4)
+    end
+
+    it ".total_item_inventory_for_merchant" do
+      expect(@o1.total_item_inventory_for_merchant(@merchant.id)).to eq(18)
+      expect(@o2.total_item_inventory_for_merchant(@merchant.id)).to eq(10)
+    end
+
+    it ".sufficient_inventory_for_order" do
+      expect(@o1.sufficient_inventory_for_order(@merchant.id)).to eq(true)
+      expect(@o1.sufficient_inventory_for_order(@merchant.id)).to eq(true)
     end
 
     it '.total_item_count' do

@@ -48,4 +48,12 @@ class Item < ApplicationRecord
   def ordered?
     order_items.count > 0
   end
+
+  def total_quantity_for_all_pending_orders(merchant_id)
+    self.order_items.where("order_items.fulfilled = false").sum("order_items.quantity")
+  end
+
+  def sufficient_inventory?(merchant_id)
+    self.inventory >= self.total_quantity_for_all_pending_orders(merchant_id)
+  end
 end

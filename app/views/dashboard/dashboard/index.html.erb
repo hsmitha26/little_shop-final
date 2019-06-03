@@ -84,25 +84,61 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
+        <th>Order ID</th>
         <th>Created Date</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th>In Stock?</th>
       </tr>
     </thead>
     <tbody>
       <% @pending_orders.each do |order| %>
         <tr id="order-<%= order.id %>">
           <td><% if current_admin? || (current_merchant? && current_user == @merchant) %>
-          <%= link_to order.id, dashboard_order_path(order) %>
+            <%= link_to order.id, dashboard_order_path(order) %>
           <% elsif current_admin? %>
-          <%= order.id %>
+            <%= order.id %>
           <% end %></td>
           <td><%= order.created_at %></td>
           <td><%= order.total_quantity_for_merchant(@merchant.id) %></td>
           <td><%= order.total_price_for_merchant(@merchant.id) %></td>
+          <td><% if order.sufficient_inventory_for_order(@merchant.id) %>
+            Yes
+          <% else %>
+            No
+          <% end %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
+
+<h3>Pending Tasks</h3>
+<br>
+<h5>You have <%= @unfulfilled_order_count %> unfulfilled order(s) worth <%= number_to_currency(@unfulfilled_order_revenue) %>.</h5>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item(s) With Default Image</th>
+      <th>Sufficient Item Inventory For All Orders</th>
+    </tr>
+  </thead>
+  <tbody>
+<% @merchant.items.each do |item| %>
+  <tr id="items-to-do-<%= item.id %>">
+    <td><% if item.image == "https://picsum.photos/200/300" %>
+      Change the default item image: <%= link_to item.name, edit_dashboard_item_path(item)%>
+      <% else %>
+      <%= item.name %>
+      <% end %></td>
+    <td><% if item.sufficient_inventory?(@merchant.id) %>
+        Yes
+      <% else %>
+        No
+      <% end %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+<br>

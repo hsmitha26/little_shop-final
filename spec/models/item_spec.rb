@@ -58,8 +58,16 @@ RSpec.describe Item, type: :model do
       @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
       @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
       @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
+      @order_item_5 = create(:order_item, item: @item)
     end
 
+    it ".total_quantity_for_all_pending_orders" do
+      expect(@item.total_quantity_for_all_pending_orders(@merchant.id)).to eq(22)
+    end
+
+    it ".sufficient_inventory?" do
+      expect(@item.sufficient_inventory?(@merchant.id)).to eq(false)
+    end
     describe "#average_fulfillment_time" do
       it "calculates the average number of seconds between order_item creation and completion" do
         expect(@item.average_fulfillment_time).to eq(158400)
