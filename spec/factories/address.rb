@@ -5,7 +5,7 @@ FactoryBot.define do
     sequence(:city) { |n| "Home City #{n}" }
     sequence(:state) { |n| "Home State #{n}" }
     sequence(:zip) { |n| "Zip #{n}" }
-    role { 0 }
+    nickname { 'home' }
   end
 
   factory :work, parent: :home do
@@ -13,6 +13,6 @@ FactoryBot.define do
     sequence(:address) { |n| "Work Address #{n}" }
     sequence(:city) { |n| "Work City #{n}" }
     sequence(:state) { |n| "Work State #{n}" }
-    role { 1 }
+    nickname { 'work' }
   end
 end
