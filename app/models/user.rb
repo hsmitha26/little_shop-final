@@ -3,8 +3,10 @@ class User < ApplicationRecord
 
   enum role: [:default, :merchant, :admin]
 
-  validates_presence_of :name, :address, :city, :state, :zip
+  # validates_presence_of :name, :address, :city, :state, :zip
   validates :email, presence: true, uniqueness: true
+
+  has_many :addresses
 
   # as a consumer
   has_many :orders
