@@ -10,10 +10,11 @@ RSpec.describe 'the registration page' do
       fill_in :user_password, with: "password"
       fill_in :user_password_confirmation, with: "password"
 
-      fill_in :addresses_street, with: "street"
-      fill_in :addresses_city, with: "city"
-      fill_in :addresses_state, with: "state"
-      fill_in :addresses_zip, with: "zip"
+      fill_in :user_addresses_attributes_0_nickname, with: "home"
+      fill_in :user_addresses_attributes_0_street, with: "street"
+      fill_in :user_addresses_attributes_0_city, with: "city"
+      fill_in :user_addresses_attributes_0_state, with: "state"
+      fill_in :user_addresses_attributes_0_zip, with: "zip"
 
       click_button "Submit"
 
@@ -54,10 +55,11 @@ RSpec.describe 'the registration page' do
       fill_in :user_password, with: "password"
       fill_in :user_password_confirmation, with: "password"
 
-      fill_in :addresses_street, with: "address_1"
-      fill_in :addresses_city, with: "city_1"
-      fill_in :addresses_state, with: "state_1"
-      fill_in :addresses_zip, with: "zip_1"
+      fill_in :user_addresses_attributes_0_nickname, with: "home"
+      fill_in :user_addresses_attributes_0_street, with: "street"
+      fill_in :user_addresses_attributes_0_city, with: "city"
+      fill_in :user_addresses_attributes_0_state, with: "state"
+      fill_in :user_addresses_attributes_0_zip, with: "zip"
 
       click_button "Submit"
 
@@ -81,10 +83,11 @@ RSpec.describe 'the registration page' do
       fill_in :user_password, with: "password"
       fill_in :user_password_confirmation, with: "a different password"
 
-      fill_in :addresses_street, with: "street 1"
-      fill_in :addresses_city, with: "city"
-      fill_in :addresses_state, with: "state"
-      fill_in :addresses_zip, with: "zip"
+      fill_in :user_addresses_attributes_0_nickname, with: "home"
+      fill_in :user_addresses_attributes_0_street, with: "street"
+      fill_in :user_addresses_attributes_0_city, with: "city"
+      fill_in :user_addresses_attributes_0_state, with: "state"
+      fill_in :user_addresses_attributes_0_zip, with: "zip"
 
       click_button "Submit"
 

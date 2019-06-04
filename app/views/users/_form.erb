@@ -11,15 +11,20 @@
 
 <p>
   <%= f.label :password %>:
-  <%= f.password_field :password, required: true %>
+  <%= f.password_field :password %>
 </p>
 
 <p>
   <%= f.label :password_confirmation %>:
-  <%= f.password_field :password_confirmation, required: true %>
+  <%= f.password_field :password_confirmation %>
 </p>
 
-  <%= fields_for :addresses do |a| %>
+  <%= f.fields_for :addresses do |a| %>
+    <p>
+      <%= a.label :nickname %>:
+      <%= a.text_field :nickname, required: true %>
+    </p>
+
     <p>
       <%= a.label :street %>:
       <%= a.text_field :street, required: true %>

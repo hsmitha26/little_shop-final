@@ -1,4 +1,4 @@
-<%= form_for @address do |f| %>
+<%= form_for @address, url: profile_addresses_path do |f| %>
   <p>
     <%= f.label :nickname %>:
     <%= f.text_field :nickname, required: true %>
@@ -22,5 +22,9 @@
   <p>
     <%= f.label :zip %>:
     <%= f.text_field :zip, required: true %>
+  </p>
+
+  <p>
+    <%= f.submit "Add New Address" %>
   </p>
 <% end %>

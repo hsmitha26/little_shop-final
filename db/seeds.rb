@@ -2,13 +2,16 @@ require 'factory_bot_rails'
 
 include FactoryBot::Syntax::Methods
 
-# OrderItem.destroy_all
-# Order.destroy_all
+OrderItem.destroy_all
+Order.destroy_all
 Item.destroy_all
 User.destroy_all
+Address.destroy_all
 
 admin = create(:admin)
 user = create(:user)
+home = user.addresses.create(nickname: 'home', street: 'Street', city: 'city', state: 'state', zip: '1')
+work = user.addresses.create(nickname: 'work', street: 'Street', city: 'city', state: 'state', zip: '1')
 merchant_1 = create(:merchant)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)

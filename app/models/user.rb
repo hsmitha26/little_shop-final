@@ -1,12 +1,14 @@
 class User < ApplicationRecord
   has_secure_password
 
+
   enum role: [:default, :merchant, :admin]
 
   validates_presence_of :name
   validates :email, presence: true, uniqueness: true
 
   has_many :addresses
+  accepts_nested_attributes_for :addresses
 
   # as a consumer
   has_many :orders

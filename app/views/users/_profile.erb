@@ -1,12 +1,12 @@
 <h1>Profile Page for <%= @user.name %></h1>
 
 <section id="profile-data">
-  <h2>Order Data</h2>
   <p>Email: <%= @user.email %></p>
   <p>Role: <%= @user.role %></p>
   <aside id="address-details">
     <h3>Address:</h3>
     <% @user.addresses.each do |address| %>
+    <div id="address-details-<%= address.id %>">
       <p>Nickname: <%= address.nickname.titleize %></p>
       <p><%= address.street %></p>
       <p>
@@ -14,6 +14,8 @@
         <%= address.state %>
         <%= address.zip %>
       </p>
+      <p><%= link_to 'Delete Address', profile_address_path(address), method: :delete %></p>
+    </div>
     <% end %>
   </aside>
   <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>

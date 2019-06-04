@@ -36,7 +36,7 @@ RSpec.describe 'user profile', type: :feature do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
 
         visit profile_path
-        
+
         click_link 'Edit'
 
         expect(current_path).to eq('/profile/edit')
@@ -60,6 +60,7 @@ RSpec.describe 'user profile', type: :feature do
         @updated_state = 'S. California'
         @updated_zip = '33333'
         @updated_password = 'newandextrasecure'
+        @updated_nickname = 'other'
       end
 
       describe 'succeeds with allowable updates' do
@@ -71,12 +72,14 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :addresses_street, with: @updated_street
-          fill_in :addresses_city, with: @updated_city
-          fill_in :addresses_state, with: @updated_state
-          fill_in :addresses_zip, with: @updated_zip
           fill_in :user_password, with: @updated_password
           fill_in :user_password_confirmation, with: @updated_password
+
+          fill_in :user_addresses_attributes_1_nickname, with: @updated_nickname
+          fill_in :user_addresses_attributes_1_street, with: @updated_street
+          fill_in :user_addresses_attributes_1_city, with: @updated_city
+          fill_in :user_addresses_attributes_1_state, with: @updated_state
+          fill_in :user_addresses_attributes_1_zip, with: @updated_zip
 
           click_button 'Submit'
 
@@ -103,10 +106,12 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :addresses_street, with: @updated_street
-          fill_in :addresses_city, with: @updated_city
-          fill_in :addresses_state, with: @updated_state
-          fill_in :addresses_zip, with: @updated_zip
+
+          fill_in :user_addresses_attributes_1_nickname, with: @updated_nickname
+          fill_in :user_addresses_attributes_1_street, with: @updated_street
+          fill_in :user_addresses_attributes_1_city, with: @updated_city
+          fill_in :user_addresses_attributes_1_state, with: @updated_state
+          fill_in :user_addresses_attributes_1_zip, with: @updated_zip
 
           click_button 'Submit'
 

@@ -8,6 +8,8 @@ RSpec.describe 'merchant order show workflow' do
       @merchant1 = create(:merchant)
       @merchant2 = create(:merchant)
       @user = create(:user)
+      @a1 = @user.addresses.create(nickname: 'home', street: 'Street 1', city: 'City 1', state: 'CO', zip: '1')
+      @a2 = @user.addresses.create(nickname: 'work', street: 'Street 2', city: 'City 2', state: 'CO', zip: '2')
       @order = create(:order, user: @user)
       @item1 = create(:item, user: @merchant1, inventory: 2)
       @item2 = create(:item, user: @merchant2, inventory: 2)
@@ -32,7 +34,7 @@ RSpec.describe 'merchant order show workflow' do
         visit dashboard_order_path(@order)
 
         expect(page).to have_content("Customer Name: #{@user.name}")
-        expect(page).to have_content("Customer Address: #{@user.address} #{@user.city}, #{@user.state} #{@user.zip}")
+        expect(page).to have_content("Customer Address: #{@a1.street} #{@a1.city}, #{@a1.state} #{@a1.zip}")
       end
 
       it 'shows item information for that merchant' do
