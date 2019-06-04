@@ -151,9 +151,10 @@ class User < ApplicationRecord
 
   def self.top_user_cities_by_order_count(limit)
     self.joins(:orders)
+        .joins('JOIN addresses ON users.id = addresses.user_id')
         .where(orders: {status: :shipped})
-        .group(:state, :city)
-        .select('users.city, users.state, count(orders.id) AS order_count')
+        .group('addresses.state, addresses.city')
+        .select('addresses.city, addresses.state, count(orders.id) AS order_count')
         .order('order_count DESC')
         .limit(limit)
   end

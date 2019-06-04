@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe 'user profile', type: :feature do
   before :each do
     @user = create(:user)
+    @a1 = @user.addresses.create(nickname: 'home', street: 'Street 1', city: 'City 1', state: 'CO', zip: '1')
+    @a2 = @user.addresses.create(nickname: 'work', street: 'Street 2', city: 'City 2', state: 'CO', zip: '2')
   end
 
   describe 'registered user visits their profile' do
@@ -15,8 +17,13 @@ RSpec.describe 'user profile', type: :feature do
         expect(page).to have_content("Role: #{@user.role}")
         expect(page).to have_content("Email: #{@user.email}")
         within '#address-details' do
-          expect(page).to have_content("Address: #{@user.address}")
-          expect(page).to have_content("#{@user.city}, #{@user.state} #{@user.zip}")
+          expect(page).to have_content("Nickname: #{@a1.nickname.titleize}")
+          expect(page).to have_content("#{@a1.street}")
+          expect(page).to have_content("#{@a1.city}, #{@a1.state} #{@a1.zip}")
+
+          expect(page).to have_content("Nickname: #{@a2.nickname.titleize}")
+          expect(page).to have_content("#{@a2.street}")
+          expect(page).to have_content("#{@a2.city}, #{@a2.state} #{@a2.zip}")
         end
         expect(page).to have_link('Edit Profile Data')
       end
@@ -29,16 +36,16 @@ RSpec.describe 'user profile', type: :feature do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
 
         visit profile_path
-
+        
         click_link 'Edit'
 
         expect(current_path).to eq('/profile/edit')
         expect(find_field('Name').value).to eq(@user.name)
         expect(find_field('Email').value).to eq(@user.email)
-        expect(find_field('Address').value).to eq(@user.address)
-        expect(find_field('City').value).to eq(@user.city)
-        expect(find_field('State').value).to eq(@user.state)
-        expect(find_field('Zip').value).to eq(@user.zip)
+        # expect(find_field('Street').value).to eq(@a1.street)
+        # expect(find_field('City').value).to eq(@a1.city)
+        # expect(find_field('State').value).to eq(@a1.state)
+        # expect(find_field('Zip').value).to eq(@a1.zip)
         expect(find_field('Password').value).to eq(nil)
         expect(find_field('Password confirmation').value).to eq(nil)
       end
@@ -48,7 +55,7 @@ RSpec.describe 'user profile', type: :feature do
       before :each do
         @updated_name = 'Updated Name'
         @updated_email = 'updated_email@example.com'
-        @updated_address = 'newest address'
+        @updated_street = 'newest address'
         @updated_city = 'new new york'
         @updated_state = 'S. California'
         @updated_zip = '33333'
@@ -64,10 +71,10 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :user_address, with: @updated_address
-          fill_in :user_city, with: @updated_city
-          fill_in :user_state, with: @updated_state
-          fill_in :user_zip, with: @updated_zip
+          fill_in :addresses_street, with: @updated_street
+          fill_in :addresses_city, with: @updated_city
+          fill_in :addresses_state, with: @updated_state
+          fill_in :addresses_zip, with: @updated_zip
           fill_in :user_password, with: @updated_password
           fill_in :user_password_confirmation, with: @updated_password
 
@@ -76,6 +83,7 @@ RSpec.describe 'user profile', type: :feature do
           updated_user = User.find(@user.id)
 
           expect(current_path).to eq(profile_path)
+
           expect(page).to have_content("Your profile has been updated")
           expect(page).to have_content("#{@updated_name}")
           within '#profile-data' do
@@ -95,10 +103,10 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :user_address, with: @updated_address
-          fill_in :user_city, with: @updated_city
-          fill_in :user_state, with: @updated_state
-          fill_in :user_zip, with: @updated_zip
+          fill_in :addresses_street, with: @updated_street
+          fill_in :addresses_city, with: @updated_city
+          fill_in :addresses_state, with: @updated_state
+          fill_in :addresses_zip, with: @updated_zip
 
           click_button 'Submit'
 
