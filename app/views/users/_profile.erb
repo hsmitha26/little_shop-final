@@ -3,8 +3,11 @@
 <section id="profile-data">
   <p>Email: <%= @user.email %></p>
   <p>Role: <%= @user.role %></p>
+  <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>
   <aside id="address-details">
-    <h3>Address:</h3>
+    <h3>Addresses:</h3>
+    <p><%= link_to 'Add New Address', new_profile_address_path unless current_admin? %></p>
+    <br>
     <% @user.addresses.each do |address| %>
     <div id="address-details-<%= address.id %>">
       <p>Nickname: <%= address.nickname.titleize %></p>
@@ -14,12 +17,12 @@
         <%= address.state %>
         <%= address.zip %>
       </p>
+      <p><%= link_to 'Update Address', edit_profile_address_path(address) %></p>
       <p><%= link_to 'Delete Address', profile_address_path(address), method: :delete %></p>
+      <br>
     </div>
     <% end %>
   </aside>
-  <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>
-  <p><%= link_to 'Add New Address', new_profile_address_path unless current_admin? %></p>
 </section>
 
 <section id="orders-data">

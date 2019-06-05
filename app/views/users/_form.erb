@@ -19,6 +19,7 @@
   <%= f.password_field :password_confirmation %>
 </p>
 
+<% unless current_user %>
   <%= f.fields_for :addresses do |a| %>
     <p>
       <%= a.label :nickname %>:
@@ -45,7 +46,7 @@
       <%= a.text_field :zip, required: true %>
     </p>
   <% end %>
-
+<% end %>
 <p>
   <%= f.submit "Submit" %>
 </p>
