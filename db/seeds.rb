@@ -9,15 +9,26 @@ User.destroy_all
 Address.destroy_all
 
 admin = create(:admin)
+a_home = create(:address, nickname: 'home', user: admin)
+
 user = create(:user)
 home = user.addresses.create(nickname: 'home', street: 'Street', city: 'city', state: 'state', zip: '1')
 work = user.addresses.create(nickname: 'work', street: 'Street', city: 'city', state: 'state', zip: '1')
+
 merchant_1 = create(:merchant)
+m1_home = create(:address, nickname: 'home', user: merchant_1)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
+m2_home = create(:address, nickname: 'home', user: merchant_2)
+m3_home = create(:address, nickname: 'home', user: merchant_3)
+m4_home = create(:address, nickname: 'home', user: merchant_4)
+
 
 inactive_merchant_1 = create(:inactive_merchant)
+m5_home = create(:address, nickname: 'home', user: inactive_merchant_1)
+
 inactive_user_1 = create(:inactive_user)
+inactive_user_home = create(:address, nickname: 'home', user: inactive_user_1)
 
 item_1 = create(:item, user: merchant_1)
 item_2 = create(:item, user: merchant_2)

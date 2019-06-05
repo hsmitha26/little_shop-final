@@ -14,20 +14,24 @@ RSpec.describe Order, type: :model do
   describe 'instance methods' do
     before :each do
       user = create(:user)
+      @a1 = create(:address, user: user)
+
       @item_1 = create(:item)
       @item_2 = create(:item)
       yesterday = 1.day.ago
 
-      @order = create(:order, user: user, created_at: yesterday)
+      @order = create(:order, user: user, created_at: yesterday, address: @a1)
       @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
       @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
 
       @merchant = create(:merchant)
+      @a2 = create(:address, user: @merchant)
+
       @i1, @i2 = create_list(:item, 2, user: @merchant)
-      @o1, @o2 = create_list(:order, 2)
-      @o3 = create(:packaged_order)
-      @o4 = create(:shipped_order)
-      @o5 = create(:cancelled_order)
+      @o1, @o2 = create_list(:order, 2, address: @a1)
+      @o3 = create(:packaged_order, address: @a1)
+      @o4 = create(:shipped_order, address: @a1)
+      @o5 = create(:cancelled_order, address: @a1)
       create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
       create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
       create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
@@ -48,30 +52,33 @@ RSpec.describe Order, type: :model do
   describe 'class methods' do
     before :each do
       user = create(:user)
+      @a1 = create(:address, user: user)
+
       @merchant = create(:merchant)
+      @a2 = create(:address, user: @merchant)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
 
-      @o1, @o2, @o3, @o4, @o5 = create_list(:shipped_order, 5, user: user)
+      @o1, @o2, @o3, @o4, @o5 = create_list(:shipped_order, 5, user: user, address: @a1)
       oi1 = create(:fulfilled_order_item, order: @o1)
       oi2 = create(:fulfilled_order_item, order: @o2)
       oi3 = create(:fulfilled_order_item, order: @o3)
       oi4 = create(:fulfilled_order_item, order: @o4)
       oi5 = create(:fulfilled_order_item, order: @o5)
 
-      @o6 = create(:shipped_order, user: user)
+      @o6 = create(:shipped_order, user: user, address: @a1)
       oi2 = create(:fulfilled_order_item, order: @o6)
 
-      @o7, @o8 = create_list(:order, 2, user: user)
+      @o7, @o8 = create_list(:order, 2, user: user, address: @a1)
       @oi1 = create(:order_item, order: @o7, item: @i1)
       # create(:order_item, order: @o7)
       @oi2 = create(:order_item, order: @o8, item: @i2)
 
-      @packaged_orders = create_list(:packaged_order, 3, user: user)
+      @packaged_orders = create_list(:packaged_order, 3, user: user, address: @a1)
       create(:fulfilled_order_item, order: @packaged_orders[0])
       create(:fulfilled_order_item, order: @packaged_orders[1])
       create(:fulfilled_order_item, order: @packaged_orders[2])
 
-      @cancelled_orders = create_list(:cancelled_order, 2, user: user)
+      @cancelled_orders = create_list(:cancelled_order, 2, user: user, address: @a1)
       create(:order_item, order: @cancelled_orders[0])
       create(:order_item, order: @cancelled_orders[1])
     end

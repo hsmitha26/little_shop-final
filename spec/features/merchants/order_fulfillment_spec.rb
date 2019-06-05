@@ -6,11 +6,15 @@ RSpec.describe 'merchant order show workflow' do
   describe 'as a merchant' do
     before :each do
       @merchant1 = create(:merchant)
+      @a3 = create(:address, user: @merchant1)
+
       @merchant2 = create(:merchant)
+      @a4 = create(:address, user: @merchant2)
+
       @user = create(:user)
       @a1 = @user.addresses.create(nickname: 'home', street: 'Street 1', city: 'City 1', state: 'CO', zip: '1')
       @a2 = @user.addresses.create(nickname: 'work', street: 'Street 2', city: 'City 2', state: 'CO', zip: '2')
-      @order = create(:order, user: @user)
+      @order = create(:order, user: @user, address: @a1)
       @item1 = create(:item, user: @merchant1, inventory: 2)
       @item2 = create(:item, user: @merchant2, inventory: 2)
       @item3 = create(:item, user: @merchant1, inventory: 2)

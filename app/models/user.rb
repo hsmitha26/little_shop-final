@@ -45,23 +45,19 @@ class User < ApplicationRecord
   end
 
   def top_states_by_items_shipped(limit)
-    items.joins(:order_items)
-         .joins('join orders on orders.id = order_items.order_id')
-         .joins('join users on users.id = orders.user_id')
+    items.joins(orders: :addresses)
+         .select('addresses.state, sum(order_items.quantity) AS quantity')
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .group('users.state')
-         .select('users.state, sum(order_items.quantity) AS quantity')
+         .group('addresses.state')
          .order('quantity DESC')
          .limit(limit)
   end
 
   def top_cities_by_items_shipped(limit)
-    items.joins(:order_items)
-         .joins('join orders on orders.id = order_items.order_id')
-         .joins('join users on users.id = orders.user_id')
+    items.select('addresses.state, addresses.city, sum(order_items.quantity) AS quantity')
+         .joins(:order_items)
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .group('users.state, users.city')
-         .select('users.state, users.city, sum(order_items.quantity) AS quantity')
+         .group('addresses.state, addresses.city')
          .order('quantity DESC')
          .limit(limit)
   end
@@ -143,9 +139,10 @@ class User < ApplicationRecord
 
   def self.top_user_states_by_order_count(limit)
     self.joins(:orders)
+        .joins('JOIN addresses ON users.id = addresses.user_id')
         .where(orders: {status: :shipped})
-        .group(:state)
-        .select('users.state, count(orders.id) AS order_count')
+        .group('addresses.state')
+        .select('addresses.state, count(orders.id) AS order_count')
         .order('order_count DESC')
         .limit(limit)
   end
