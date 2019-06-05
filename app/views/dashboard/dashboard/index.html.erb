@@ -5,10 +5,12 @@
     <h5 class="card-title"><%= @merchant.name %></h5>
     <p>Role: <%= @merchant.role %></p>
     <p>Email: <%= @merchant.email %></p>
-    <p>Address: <%= @merchant.address %></p>
-    <p>City: <%= @merchant.city %></p>
-    <p>State: <%= @merchant.state %></p>
-    <p>Zip: <%= @merchant.zip %></p>
+    <% @merchant.addresses.each do |address| %>
+      <p>Address: <%= address.street %></p>
+      <p>City: <%= address.city %></p>
+      <p>State: <%= address.state %></p>
+      <p>Zip: <%= address.zip %></p>
+    <% end %>
     <%= button_to 'Downgrade to User', admin_downgrade_merchant_path(@merchant), method: :patch if current_admin? %>
   </div>
 </div>
@@ -30,17 +32,17 @@
     <%= tag.section id: "top-states-by-items-shipped", class: "card-body float-left m-2" do %>
       <h5 class="card-title">Top States by Items Shipped</h5>
       <ul>
-        <% @merchant.top_states_by_items_shipped(3).each do |item| %>
-          <li><%= item.state %>: <%= item.quantity %></li>
-        <% end %>
+        <%# <% @merchant.top_states_by_items_shipped(3).each do |item| %> %>
+          <!-- <li> item.state %>:  item.quantity %></li> -->
+        <%# <% end %> %>
       </ul>
     <% end %>
     <%= tag.section id: "top-cities-by-items-shipped", class: "card-body float-left m-2" do %>
       <h5 class="card-title">Top Cities by Items Shipped</h5>
       <ul>
-        <% @merchant.top_cities_by_items_shipped(3).each do |item| %>
-          <li><%= item.city %>, <%= item.state %>: <%= item.quantity %></li>
-        <% end %>
+        <%# <% @merchant.top_cities_by_items_shipped(3).each do |item| %> %>
+          <!-- <li>< item.city %>,  item.state %>:  item.quantity %></li> -->
+        <%# <% end %> %>
       </ul>
     <% end %>
     <%= tag.section id: "top-users-by-money-spent", class: "card-body float-left m-2" do %>

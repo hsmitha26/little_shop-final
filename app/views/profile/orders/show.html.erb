@@ -5,9 +5,25 @@
   <p>Status: <%= @order.status %></p>
   <p>Item Count: <%= @order.total_item_count %></p>
   <p>Total Cost: <%= number_to_currency(@order.total_cost) %></p>
-
+  <p>Currently Shipping To: <%= @order.address.nickname %></p>
+  <p><%= @order.address.street %></p>
+  <p><%= @order.address.city %>, <%= @order.address.state %>, <%= @order.address.zip %></p>
   <% if @order.status == 'pending' || @order.status == 'packaged' %>
   <p><%= button_to 'Cancel Order', profile_order_path(@order), method: :delete %></p>
+  <% end %>
+  <br>
+  <% if @order.status == 'pending' %>
+    <p>Change Shipping Address</p>
+      <% current_user.addresses.each do |address| %>
+        <div id="address-<%= address.id %>">
+          <% if @order.address != address %>
+            <p>Ship To: <%= address.nickname %></p>
+            <p><%= address.street %></p>
+            <p><%= address.city %>, <%= address.state %>, <%= address.zip %></p>
+            <p><%= link_to 'Choose This Address', profile_order_path(@order, address_id: address), method: :patch %></p>
+          <% end %>
+        </div>
+      <% end %>
   <% end %>
 
   <% @order.order_items.each do |oitem| %>

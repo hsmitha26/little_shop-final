@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe "admin users workflow" do
   before :each do
     @admin = create(:admin)
+    @a1 = create(:address, user: @admin)
+
     @user = create(:user)
+    @a2 = create(:address, user: @user)
+
   end
 
   context "as an admin" do

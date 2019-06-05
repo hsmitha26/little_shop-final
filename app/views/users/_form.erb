@@ -1,32 +1,12 @@
 <%= form_for @user, url: form_submit_path do |f| %>
 <p>
   <%= f.label :name %>:
-  <%= f.text_field :name %>
-</p>
-
-<p>
-  <%= f.label :address %>:
-  <%= f.text_field :address %>
-</p>
-
-<p>
-  <%= f.label :city %>:
-  <%= f.text_field :city %>
-</p>
-
-<p>
-  <%= f.label :state %>:
-  <%= f.text_field :state %>
-</p>
-
-<p>
-  <%= f.label :zip %>:
-  <%= f.text_field :zip %>
+  <%= f.text_field :name, required: true %>
 </p>
 
 <p>
   <%= f.label :email %>:
-  <%= f.text_field :email %>
+  <%= f.text_field :email, required: true %>
 </p>
 
 <p>
@@ -39,6 +19,34 @@
   <%= f.password_field :password_confirmation %>
 </p>
 
+<% unless current_user %>
+  <%= f.fields_for :addresses do |a| %>
+    <p>
+      <%= a.label :nickname %>:
+      <%= a.text_field :nickname, required: true %>
+    </p>
+
+    <p>
+      <%= a.label :street %>:
+      <%= a.text_field :street, required: true %>
+    </p>
+
+    <p>
+      <%= a.label :city %>:
+      <%= a.text_field :city, required: true %>
+    </p>
+
+    <p>
+      <%= a.label :state %>:
+      <%= a.text_field :state, required: true %>
+    </p>
+
+    <p>
+      <%= a.label :zip %>:
+      <%= a.text_field :zip, required: true %>
+    </p>
+  <% end %>
+<% end %>
 <p>
   <%= f.submit "Submit" %>
 </p>

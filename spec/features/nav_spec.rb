@@ -3,12 +3,19 @@ require 'rails_helper'
 RSpec.describe 'Site Nav', type: :feature do
   before :each do
     @user = create(:user)
+    @a1 = create(:address, user: @user)
+
     @user_2 = create(:user)
+    @a2 = create(:address, user: @user_2)
+
     @merchant = create(:merchant)
+    @a3 = create(:address, user: @merchant)
+
     @admin = create(:admin)
+    @a4 = create(:address, user: @admin)
 
     item_1 = create(:item, user: @merchant)
-    order = create(:shipped_order, user: @user)
+    order = create(:shipped_order, user: @user, address: @a1)
     create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1, created_at: 2.days.ago, updated_at: 1.minutes.ago)
   end
 
