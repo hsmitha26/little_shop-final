@@ -5,6 +5,9 @@ include ActionView::Helpers::NumberHelper
 RSpec.describe 'Profile Orders page', type: :feature do
   before :each do
     @user = create(:user)
+    @a1 = create(:address, user: @user)
+    @a2 = create(:address, nickname: 'work', user: @user)
+    @a3 = create(:address, nickname: 'other', user: @user)
     @admin = create(:admin)
 
     @merchant_1 = create(:merchant)
@@ -27,7 +30,7 @@ RSpec.describe 'Profile Orders page', type: :feature do
     describe 'should show information about each order when I do have orders' do
       before :each do
         yesterday = 1.day.ago
-        @order = create(:order, user: @user, created_at: yesterday)
+        @order = create(:order, user: @user, created_at: yesterday, address: @a1)
         @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
         @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
       end
@@ -40,7 +43,6 @@ RSpec.describe 'Profile Orders page', type: :feature do
 
       after :each do
         expect(page).to_not have_content('You have no orders yet')
-
         within "#order-#{@order.id}" do
           expect(page).to have_link("Order ID #{@order.id}")
           expect(page).to have_content("Created: #{@order.created_at}")
@@ -55,7 +57,7 @@ RSpec.describe 'Profile Orders page', type: :feature do
     describe 'should show a single order show page' do
       before :each do
         yesterday = 1.day.ago
-        @order = create(:order, user: @user, created_at: yesterday)
+        @order = create(:order, user: @user, created_at: yesterday, address: @a1)
         @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 3, created_at: yesterday, updated_at: yesterday)
         @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 5, created_at: yesterday, updated_at: 2.hours.ago)
       end
@@ -71,6 +73,20 @@ RSpec.describe 'Profile Orders page', type: :feature do
         expect(page).to have_content("Created: #{@order.created_at}")
         expect(page).to have_content("Last Update: #{@order.updated_at}")
         expect(page).to have_content("Status: #{@order.status}")
+        expect(page).to have_content("Currently Shipping To: #{@a1.nickname}")
+
+        within "#address-#{@a2.id}" do
+          expect(page).to have_content(@a2.nickname)
+          expect(page).to have_link("Choose This Address")
+        end
+        within "#address-#{@a3.id}" do
+          expect(page).to have_content(@a3.nickname)
+          expect(page).to have_link("Choose This Address")
+          click_link 'Choose This Address'
+        end
+
+        expect(page).to have_content("Currently Shipping To: #{@a3.nickname}")
+
         within "#oitem-#{@oi_1.id}" do
           expect(page).to have_content(@oi_1.item.name)
           expect(page).to have_content(@oi_1.item.description)

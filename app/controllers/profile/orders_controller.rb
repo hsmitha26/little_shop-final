@@ -10,6 +10,14 @@ class Profile::OrdersController < ApplicationController
     @order = Order.find(params[:id])
   end
 
+  def update
+    address = Address.find(params[:address_id])
+    @order = Order.find(params[:id])
+    @order.address_id = address.id
+    @order.save
+    redirect_to profile_order_path(@order)
+  end
+
   def destroy
     @order = Order.find(params[:id])
     if @order.user == current_user
